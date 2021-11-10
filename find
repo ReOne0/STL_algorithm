@@ -1,2 +1,179 @@
 #inlcude<vector>
 #include<algorithm>
+
+//find，找指定值，返回迭代器，返回的是end()，没有找到，自定义类型重载==
+//find_if,返回的是首个符合条件的迭代器,自定义与int相同，在外部写仿函数，提供谓词
+//adjacent_find相邻重复元素，得到第一个元素的迭代器
+//binary_search指定元素是否存在，返回true，false，无序中不能用，二分法
+
+void test01()
+{
+	vector<int>v1;
+	for (int i = 0; i < 10; i++)
+	{
+		v1.push_back(i);
+	}
+	vector<int>::iterator it=find(v1.begin(), v1.end(), 99);//find
+	if (it == v1.end())
+	{
+		cout << "没有找到" << endl;
+	}
+	else
+	{
+		cout << "找到了" << *it << endl;
+	}
+}
+//find自定义类型的时候要重载==运算符，
+class Person
+{
+public:
+	Person(string name,int age)
+	{
+		this->m_Age = age;
+		this->m_Name = name;
+	}
+	bool operator==(const Person& p)
+	{
+		return this->m_Name == p.m_Name && this->m_Age == p.m_Age;
+	}
+	string m_Name;
+	int m_Age;
+};
+void test02()
+{
+	vector<Person>v1;
+	Person p1("zhangsan", 1);
+	Person p2("LiSi", 2);
+	Person p3("ZhaoWu", 2);
+	v1.push_back(p1);
+	v1.push_back(p2);
+	v1.push_back(p3);
+	Person p4("LiSi", 2);//在容器里面找有没有跟p4相同的人，自定义类型，重载运算符
+	vector<Person>::iterator it = find(v1.begin(), v1.end(), p4);
+	if (it == v1.end())
+	{
+		cout << "没有找到" << endl;
+	}
+	else
+	{
+		cout << "找到了" << (*it).m_Age<<(*it).m_Name << endl;
+	}
+}
+//find_if,返回的是首个符合条件的迭代器,自定义与int相同，在外部写仿函数
+class MyFindIf
+{
+public:
+	bool operator()(int val1)
+	{
+		return val1 > 5;
+	}
+};
+void test03()
+{
+	vector<int>v1;
+	for (int i = 0; i < 10; i++)
+	{
+		v1.push_back(i);
+	}
+	vector<int>::iterator it = find_if(v1.begin(), v1.end(), MyFindIf());
+	if (it != v1.end())
+	{
+		cout << "找到了" << *it << endl;
+	}
+	else
+	{
+		cout << "没有找到" << endl;
+	}
+}
+class Person2
+{
+public:
+	Person2(string name, int age)
+	{
+		this->m_Age = age;
+		this->m_Name = name;
+	}
+	
+	string m_Name;
+	int m_Age;
+};
+class GrearteFindIf
+{
+public:
+	bool operator()(const Person2& p)
+	{
+		return p.m_Age > 5;
+	}
+};
+
+void test04()
+{
+	vector<Person2>v1;
+	Person2 p1("zhangsan", 1);
+	Person2 p2("LiSi", 5);
+	Person2 p3("ZhaoWu", 7);
+	v1.push_back(p1);
+	v1.push_back(p2);
+	v1.push_back(p3);
+	vector<Person2>::iterator it = find_if(v1.begin(), v1.end(), GrearteFindIf());
+	if (it != v1.end())
+	{
+		cout << "找到了" << (*it).m_Age << (*it).m_Name << endl;
+	}
+	else
+	{
+		cout << "没有找到" << endl;
+	}
+}
+class MyAdjacentFind
+{
+public:
+	bool operator()(int v1, int v2)
+	{
+		return v1 == 4 && v2 == 4;
+	}
+};
+void test05()
+{
+	//adjacent_find相邻重复元素，得到第一个元素的迭代器
+	vector<int>v1;
+	v1.push_back(1);
+	v1.push_back(2);
+	v1.push_back(2);
+	v1.push_back(1);
+	v1.push_back(9);
+	v1.push_back(4);
+	v1.push_back(3);
+	v1.push_back(1);
+	//vector<int>::iterator it = adjacent_find(v1.begin(), v1.end());//只要任意有两个相等的就会输出
+	//自己写的查找特定的值4，写一个仿函数，重载运算符(),返回值为布尔，为真的时候就break，传入相比的两个类型
+	vector<int>::iterator it = adjacent_find(v1.begin(), v1.end(),MyAdjacentFind());
+	if (it != v1.end())
+	{
+		cout << "找到了" <<*it<< endl;
+	}
+	else
+	{
+		cout << "么有找到" << endl;
+	}
+}
+
+//binary_search指定元素是否存在，返回true，false，无序中不能用
+void test06()//二分数据法，速度块，但是无序不能用
+{
+	vector<int>v1;
+	for (int i = 0; i < 10; i++)//这个容器添加的是有序的，所以可以，
+	{
+		v1.push_back(i);
+	}
+	v1.push_back(3);//插入3后，表示里面的数字无序，则结果是为止的布尔变量
+	bool it = binary_search(v1.begin(), v1.end(),9);
+	if (it)
+	{
+		cout << "找到了"  << endl;
+	}
+	else
+	{
+		cout << "没有找到" << endl;
+	}
+}

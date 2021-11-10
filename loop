@@ -1,0 +1,44 @@
+//STL常用算法
+//<algorithm>比较，交换，查找，遍历，赋值，修改
+//<functional>模板类，生命函数对象
+//<numeric>序列上数学运算函数模板
+
+
+//遍历for_each，最常用的算法，
+void print01(int val)
+{
+	cout << val;
+}
+class print02
+{
+public:
+	void operator()(int val)
+	{
+		cout << val ;
+	}
+};
+class Transform
+{
+public:
+	int operator()(int val)
+	{
+		return val++;//在搬运的时候进行操作
+	}
+};
+void test01()
+{
+	vector<int>v1;
+	for (int i = 0; i < 10; i++)
+	{
+		v1.push_back(i);
+	}
+	for_each(v1.begin(), v1.end(), print01);//回调函数,遍历的时候操作这个值
+	cout << endl;
+	for_each(v1.begin(), v1.end(), print02());//仿函数，函数对象，（）是用来创建对象的
+
+	//transform搬运遍历算法
+	vector<int>v2;
+	v2.resize(v1.size());
+	transform(v1.begin(), v1.end(), v2.begin(), Transform());//运行仿函数操作当前搬运的值，
+	
+}

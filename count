@@ -1,2 +1,88 @@
 #include<vector>
 #include<algorithm>
+
+//查找算法，count
+void test01()
+{
+	//内置数据类型
+	vector<int>v1;
+	v1.push_back(1);
+	v1.push_back(2);
+	v1.push_back(3);
+	v1.push_back(3);
+	int num=count(v1.begin(), v1.end(), 3);//要包含头文件algorithm,返回个数
+	cout << num << endl;
+}
+class Person
+{
+public:
+	Person(string name, int age)
+	{
+		this->m_Name = name;
+		this->m_Age = age;
+	}
+	bool operator==(const Person& p)
+	{
+		return this->m_Age == p.m_Age;
+	}
+
+	string m_Name;
+	int m_Age;
+};
+
+void test02()
+{
+	vector<Person>v1;
+	Person p1("zhagnsan", 1);
+	Person p2("lisi", 4);
+	Person p3("lisi", 4);
+	v1.push_back(p1);
+	v1.push_back(p2);
+	v1.push_back(p3);
+	Person p4("zhuge", 4);
+	int num=count(v1.begin(), v1.end(), p4);//返回的是相等的个数
+	cout << num << endl;
+}
+//count_if
+class MyCount_if
+{
+public:
+	bool operator()(int val)
+	{
+		return val > 1;
+	}
+};
+void test03()
+{
+	vector<int>v1;
+	v1.push_back(1);
+	v1.push_back(2);
+	v1.push_back(3);
+	v1.push_back(4);
+	v1.push_back(5);
+	v1.push_back(6);
+
+	int num = count_if(v1.begin(), v1.end(), MyCount_if());
+	//提供仿函数改变条件
+	cout << num << endl;
+}
+class MyOperator
+{
+public:
+	bool operator()(const Person& p)
+	{
+		return p.m_Age > 2;
+	}
+};
+void test04()
+{
+	vector<Person>v1;
+	Person p1("zhagnsan", 1);
+	Person p2("lisi", 4);
+	Person p3("lisi", 4);
+	v1.push_back(p1);
+	v1.push_back(p2);
+	v1.push_back(p3);
+	int num = count_if(v1.begin(), v1.end(), MyOperator());
+	cout << num << endl;
+}

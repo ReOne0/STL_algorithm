@@ -1,0 +1,40 @@
+//sort排序算法
+//random_shuffle随机打乱顺序
+//merge 两个容器合并，存储到另一个容器中，必须是两个有序的容器，合并到另一个有序的容器中
+//reverse//反转容器的顺序；
+
+void MySort(int val)//打印函数
+{
+	cout << val;
+}
+void test01()
+{
+	srand((unsigned int)time(nullptr));//随机种子，要加头文件ctime
+	vector<int>v1;
+	v1.push_back(1);
+	v1.push_back(5);
+	v1.push_back(2);
+	v1.push_back(8);
+	v1.push_back(6);
+	v1.push_back(3);
+	sort(v1.begin(), v1.end(),greater<int>());//使用内置的降序
+	for_each(v1.begin(), v1.end(), MySort);//使用内置遍历
+	random_shuffle(v1.begin(), v1.end());//打乱顺序
+	for_each(v1.begin(), v1.end(), MySort);
+	sort(v1.begin(), v1.end());
+	cout << endl;
+	vector<int>v2;//必须都是有序的
+	v2.push_back(2);
+	v2.push_back(3);
+	v2.push_back(4);
+	v2.push_back(6);
+	v2.push_back(7);
+	vector<int>vTarget;//目标容器
+	vTarget.resize(v1.size() + v2.size());
+	merge(v1.begin(), v1.end(), v2.begin(), v2.end(), vTarget.begin());//合并两个容器到目标容器
+	for_each(vTarget.begin(), vTarget.end(), MySort);
+	reverse(vTarget.begin(), vTarget.end());//反转
+	cout << endl;
+	for_each(vTarget.begin(), vTarget.end(), MySort);
+
+}

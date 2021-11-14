@@ -1,0 +1,48 @@
+#include<vector>
+#include<algorithm>
+#include<numeric>
+//算数生成算法 累加accumulate包含头文件<numeric>
+//fill 指定范围内重新填充
+//需要目标容器去接收新的数据集合：交集set_intersection、并集set_union、差集set_difference
+//必须有序，
+void myPrint(int val)
+{
+	cout << val << " ";
+}
+void test01()
+{
+	vector<int>v1;
+	vector<int>v2;
+		for (int i = 0; i < 10; i++)
+		{
+			v1.push_back(i);
+			v2.push_back(i + 4);
+		}
+		int total=accumulate(v1.begin(), v1.end(), 10);//起始累加值,运算结束后需要用一个值去接收
+		cout << total << endl;
+		//fill(v1.begin(), v1.end(), 2);//后期重新填充
+		for_each(v1.begin(), v1.end(), myPrint);
+		cout << endl;
+		vector<int>vTarget;//差集
+		vTarget.resize(min(v1.size(), v2.size()));//交集，用小的那个的大小的容量去开辟空间
+		//返回一个最后的元素的位置，用迭代器去接收，所以循环的时候，用返回的这个迭代器
+		//传入目标容器的起始位置
+		vector<int>::iterator itEnd=set_intersection(v1.begin(), v1.end(), v2.begin(), v2.end(),vTarget.begin());
+		for_each(vTarget.begin(), itEnd, myPrint);
+		cout << endl;
+		vector<int>vTarget2;//并集
+		vTarget2.resize(v1.size() + v2.size());
+		vector<int>::iterator itEnd2=set_union(v1.begin(), v1.end(), v2.begin(), v2.end(), vTarget2.begin());
+		for_each(vTarget2.begin(), itEnd2, myPrint);
+		cout << endl;
+		vector<int>vTarget3;//差集,两种：v1与v2的差集，v2与v1的差值
+		vTarget3.resize(max(v1.size(), v2.size()));
+		//v1和v2的差集
+		vector<int>::iterator itEnd3 = set_difference(v1.begin(), v1.end(), v2.begin(), v2.end(), vTarget3.begin());
+		for_each(vTarget3.begin(), itEnd3, myPrint);
+		cout << endl;
+		//v2和v1的差集
+		vector<int>::iterator itEnd4 = set_difference(v2.begin(), v2.end(), v1.begin(), v1.end(), vTarget3.begin());
+		for_each(vTarget3.begin(), itEnd4, myPrint);
+		cout << endl;
+}
